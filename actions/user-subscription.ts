@@ -1,19 +1,19 @@
-"use server";
+'use server';
 
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth, currentUser } from '@clerk/nextjs';
 
-import { stripe } from "@/lib/stripe";
-import { absoluteUrl } from "@/lib/utils";
-import { getUserSubscription } from "@/db/queries";
+import { stripe } from '@/lib/stripe';
+import { absoluteUrl } from '@/lib/utils';
+import { getUserSubscription } from '@/db/queries';
 
-const returnUrl = absoluteUrl("/shop");
+const returnUrl = absoluteUrl('/shop');
 
 export const createStripeUrl = async () => {
   const { userId } = await auth();
   const user = await currentUser();
 
   if (!userId || !user) {
-    throw new Error("Unauthorized");
+    throw new Error('Unauthorized');
   }
 
   const userSubscription = await getUserSubscription();
@@ -28,21 +28,21 @@ export const createStripeUrl = async () => {
   }
 
   const stripeSession = await stripe.checkout.sessions.create({
-    mode: "subscription",
-    payment_method_types: ["card"],
+    mode: 'subscription',
+    payment_method_types: ['card'],
     customer_email: user.emailAddresses[0].emailAddress,
     line_items: [
       {
         quantity: 1,
         price_data: {
-          currency: "USD",
+          currency: 'INR',
           product_data: {
-            name: "Lingo Pro",
-            description: "Unlimited Hearts",
+            name: 'Lingo Pro',
+            description: 'Unlimited Hearts',
           },
-          unit_amount: 2000, // $20.00 USD
+          unit_amount: 200000,
           recurring: {
-            interval: "month",
+            interval: 'month',
           },
         },
       },
