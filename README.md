@@ -1,1 +1,1 @@
-
+![Lingo](public/lingo.png)
